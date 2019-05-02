@@ -1,0 +1,64 @@
+{
+  "name": "project-lvl3-s456",
+  "version": "0.1.0",
+  "description": "Page loader",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "build": "NODE_ENV=production babel src --out-dir dist --source-maps inline",
+    "prepublishOnly": "npm run build"
+  },
+  "bin": {
+    "page-loader": "dist/bin/page-loader.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ValeryKorzhavin/project-lvl3-s456.git"
+  },
+  "keywords": [
+    "hexlet",
+    "page-loader",
+    "cli-tool"
+  ],
+  "jest": {
+    "testEnvironment": "node",
+    "testPathIgnorePatterns": [
+      "<rootDir>/node_modules/",
+      "<rootDir>/dist/"
+    ],
+    "collectCoverage": true,
+    "coverageReporters": [
+      "lcov",
+      "text-summary"
+    ]
+  },
+  "author": "Valery Korzhavin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ValeryKorzhavin/project-lvl3-s456/issues"
+  },
+  "homepage": "https://github.com/ValeryKorzhavin/project-lvl3-s456#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.4",
+    "@babel/node": "^7.2.2",
+    "@babel/preset-env": "^7.4.4",
+    "babel-eslint": "^10.0.1",
+    "babel-jest": "^24.7.1",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-babel": "^5.3.0",
+    "eslint-plugin-import": "^2.17.2",
+    "eslint-plugin-jest": "^22.5.1",
+    "jest": "^24.7.1",
+    "jest-cli": "^24.7.1",
+    "nock": "^10.0.6"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "commander": "^2.20.0"
+  }
+}
