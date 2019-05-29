@@ -10,5 +10,10 @@ program
   .arguments('<pageUrl>')
   .option('-o, --output [dir]', 'output dir', './')
   .usage('[options] <pageUrl>')
-  .action(pageUrl => pageLoader(pageUrl, program.output))
+  .action(pageUrl => pageLoader(pageUrl, program.output)
+    .then(() => console.log('Page was successfully downloaded'))
+    .catch((error) => {
+      console.error(error.message);
+      process.exit(error.code);
+    }))
   .parse(process.argv);

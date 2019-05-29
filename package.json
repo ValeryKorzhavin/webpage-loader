@@ -1,5 +1,5 @@
 {
-  "name": "project-lvl3-s456",
+  "name": "custom-page-loader",
   "version": "0.1.0",
   "description": "Page loader",
   "main": "index.js",
@@ -27,7 +27,8 @@
     "testEnvironment": "node",
     "testPathIgnorePatterns": [
       "<rootDir>/node_modules/",
-      "<rootDir>/dist/"
+      "<rootDir>/dist/",
+      "<rootDir>/__tests__/__fixtures__/assets/"
     ],
     "collectCoverage": true,
     "coverageReporters": [
@@ -59,6 +60,10 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "commander": "^2.20.0"
+    "cheerio": "^1.0.0-rc.3",
+    "commander": "^2.20.0",
+    "debug": "^4.1.1",
+    "listr": "^0.14.3",
+    "lodash": "^4.17.11"
   }
 }

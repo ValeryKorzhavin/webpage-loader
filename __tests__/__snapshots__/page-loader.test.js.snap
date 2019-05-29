@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`suit 404 file not found 1`] = `"Cannot read property 'statusText' of undefined"`;
+
+exports[`suit directory doesn\`t exist 1`] = `"ENOENT: no such file or directory, open 'unknown/localhost-test.html'"`;

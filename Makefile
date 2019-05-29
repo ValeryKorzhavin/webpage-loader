@@ -1,17 +1,14 @@
 install:
 	npm install
 
-run:
-	npx babel-node -- 'src/bin/page-loader.js' https://hexlet.io/courses
+run: 
+	npx babel-node -- 'src/bin/page-loader.js' https://ru.hexlet.io/courses
 
 publish:
-	npm publish
+	npm publish --dry-run
 
 lint:
 	npx eslint .
 
 test:
-	npm test
-
-test-watch:
-	npm test --watch
+	DEBUG=page-loader* npm test
