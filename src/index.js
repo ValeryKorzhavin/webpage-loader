@@ -7,7 +7,7 @@ import Listr from 'listr';
 import debug from 'debug';
 import _ from 'lodash';
 
-const assets = {
+const assetsType = {
   link: 'href',
   img: 'src',
   script: 'src',
@@ -18,31 +18,32 @@ const createLog = debug('page-loader:create');
 const downloadLog = debug('page-loader:download');
 const errorLog = debug('page-loader:error');
 
-const getCanonicalName = filepath => _.trim(filepath, '/').replace(/\W/g, '-');
+const getLocalName = filepath => _.trim(filepath, '/').replace(/\W/g, '-');
 
 export default (page, dirName) => {
   const { host, pathname, origin } = new URL(page);
-  const outputName = getCanonicalName(`${host}${pathname}`);
+  const outputName = getLocalName(`${host}${pathname}`);
   const assetsDirName = path.join(dirName, `${outputName}_files`);
   const outputFileName = `${outputName}.html`;
   const urls = [];
-  const fileNames = [];
+  const assets = [];
 
   return axios
     .get(page)
     .then((data) => {
       downloadLog('get html document');
       const $ = cheerio.load(data.data);
-      $(Object.keys(assets).join(','))
+      $(Object.keys(assetsType).join(','))
         .filter((i, el) => (
-          !!el.attribs[assets[el.name]] && !url.parse(el.attribs[assets[el.name]]).host))
+          !!el.attribs[assetsType[el.name]] && !url.parse(el.attribs[assetsType[el.name]]).host))
         .each((i, el) => {
-          const { dir, name, ext } = path.parse(el.attribs[assets[el.name]]);
-          const uri = _.trim(url.parse(el.attribs[assets[el.name]]).href, '/');
+          const { dir, name, ext } = path.parse(el.attribs[assetsType[el.name]]);
+          const uri = _.trim(url.parse(el.attribs[assetsType[el.name]]).href, '/');
           urls.push(`${origin}/${uri}`);
-          const fileName = path.join(assetsDirName, getCanonicalName(`${dir}/${name}`).concat(ext));
-          fileNames.push(fileName);
-          $(el).attr(assets[el.name], path.join(`${outputName}_files`, getCanonicalName(`${dir}/${name}`).concat(ext)));
+          const assetName = getLocalName(`${dir}/${name}`).concat(ext);
+          const assetPath = path.join(assetsDirName, assetName);
+          assets.push(assetPath);
+          $(el).attr(assetsType[el.name], path.join(`${outputName}_files`, assetName));
         });
       return $.html();
     })
@@ -55,27 +56,27 @@ export default (page, dirName) => {
       return fs.mkdir(assetsDirName);
     })
     .then(() => {
-      const tasks = new Listr(urls.map((Url, ind) => ({
-        title: `download resource from ${Url}`,
+      const tasks = new Listr(urls.map((assetUrl, index) => ({
+        title: `download resource from ${assetUrl}`,
         task: (context, task) => axios
-          .get(Url, { responseType: 'arraybuffer' })
+          .get(assetUrl, { responseType: 'arraybuffer' })
           .then((result) => {
-            downloadLog(`get resource from ${Url}`);
-            fs.writeFile(fileNames[ind], result.data);
-            saveLog(`save resource to ${fileNames[ind]}`);
+            downloadLog(`get resource from ${assetUrl}`);
+            fs.writeFile(assets[index], result.data);
+            saveLog(`save resource to ${assets[index]}`);
           })
           .catch((error) => {
-            console.error(error.message);
-            task.skip(`resource ${Url} unavailable.`);
-            errorLog(`resource ${Url} unavailable.`);
+            errorLog(`${error}`);
+            task.skip(`resource ${assetUrl} unavailable.`);
           }),
       })), { concurrent: true });
       return tasks.run();
     })
     .catch((error) => {
+      errorLog(`${error.message}`);
       const err = {};
       if (error.request) {
-        err.message = `${error.config.url} ${error.response.statusText}.`;
+        err.message = `${error.config.url} unavailable.`;
         err.code = 1;
       } else {
         err.message = error.message;
