@@ -13,7 +13,10 @@ npm install -g custom-page-loader
 page-loader --output [path] http://example.com
 ```
 ### Examples
-#### Installation
+#### Installation and run
+[![asciicast](https://asciinema.org/a/oPfuXNSLBRkC7vj46DH9lS2E5.svg)](https://asciinema.org/a/oPfuXNSLBRkC7vj46DH9lS2E5)
+
+#### Download web page with resources 
 [![asciicast](https://asciinema.org/a/fHIZuyfe81vxYpdiXvUX5s2nx.svg)](https://asciinema.org/a/fHIZuyfe81vxYpdiXvUX5s2nx)
 
 #### Logging
@@ -21,3 +24,6 @@ page-loader --output [path] http://example.com
 
 #### Errors handling
 [![asciicast](https://asciinema.org/a/XSojoquuqY1CSNor2DXjbIfBP.svg)](https://asciinema.org/a/XSojoquuqY1CSNor2DXjbIfBP)
+
+#### Render resources loading
+[![asciicast](https://asciinema.org/a/RrQoTEMoGyC9Csk4Y2EnGKc1n.svg)](https://asciinema.org/a/RrQoTEMoGyC9Csk4Y2EnGKc1n)
