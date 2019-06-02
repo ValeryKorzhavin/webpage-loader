@@ -34,16 +34,24 @@ export default (page, dirName) => {
       downloadLog('get html document');
       const $ = cheerio.load(data.data);
       $(Object.keys(assetsType).join(','))
-        .filter((i, el) => (
-          !!el.attribs[assetsType[el.name]] && !url.parse(el.attribs[assetsType[el.name]]).host))
+        .filter((i, el) => {
+          const attribName = assetsType[el.name];
+          const assetURL = el.attribs[attribName];
+          if (!assetURL) {
+            return false;
+          }
+          const { host: hostName } = url.parse(assetURL);
+          return !hostName;
+        })
         .each((i, el) => {
-          const { dir, name, ext } = path.parse(el.attribs[assetsType[el.name]]);
-          const uri = _.trim(url.parse(el.attribs[assetsType[el.name]]).href, '/');
-          urls.push(`${origin}/${uri}`);
+          const attribName = assetsType[el.name];
+          const assetURL = _.trim(el.attribs[attribName], '/');
+          const { dir, name, ext } = path.parse(assetURL);
+          urls.push(`${origin}/${assetURL}`);
           const assetName = getLocalName(`${dir}/${name}`).concat(ext);
           const assetPath = path.join(assetsDirName, assetName);
           assets.push(assetPath);
-          $(el).attr(assetsType[el.name], path.join(`${outputName}_files`, assetName));
+          $(el).attr(attribName, path.join(`${outputName}_files`, assetName));
         });
       return $.html();
     })
@@ -62,7 +70,9 @@ export default (page, dirName) => {
           .get(assetUrl, { responseType: 'arraybuffer' })
           .then((result) => {
             downloadLog(`get resource from ${assetUrl}`);
-            fs.writeFile(assets[index], result.data);
+            return fs.writeFile(assets[index], result.data);
+          })
+          .then(() => {
             saveLog(`save resource to ${assets[index]}`);
           })
           .catch((error) => {

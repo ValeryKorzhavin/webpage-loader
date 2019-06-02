@@ -8,7 +8,7 @@ program
   .version(version)
   .description(description)
   .arguments('<pageUrl>')
-  .option('-o, --output [dir]', 'output dir', './')
+  .option('-o, --output [dir]', 'output dir', process.cwd())
   .usage('[options] <pageUrl>')
   .action(pageUrl => pageLoader(pageUrl, program.output)
     .then(() => console.log('Page was successfully downloaded'))

@@ -1,7 +1,7 @@
 install:
 	npm install
 
-run: 
+run:
 	npx babel-node -- 'src/bin/page-loader.js' https://ru.hexlet.io/courses
 
 publish:
