@@ -35,8 +35,8 @@ export default (page, dirName) => {
       const $ = cheerio.load(data.data);
       $(Object.keys(assetsType).join(','))
         .filter((i, el) => {
-          const attribName = assetsType[el.name];
-          const assetURL = el.attribs[attribName];
+          const attributeName = assetsType[el.name];
+          const assetURL = el.attribs[attributeName];
           if (!assetURL) {
             return false;
           }
@@ -44,14 +44,14 @@ export default (page, dirName) => {
           return !hostName;
         })
         .each((i, el) => {
-          const attribName = assetsType[el.name];
-          const assetURL = _.trim(el.attribs[attribName], '/');
+          const attributeName = assetsType[el.name];
+          const assetURL = _.trim(el.attribs[attributeName], '/');
           const { dir, name, ext } = path.parse(assetURL);
           urls.push(`${origin}/${assetURL}`);
           const assetName = getLocalName(`${dir}/${name}`).concat(ext);
           const assetPath = path.join(assetsDirName, assetName);
           assets.push(assetPath);
-          $(el).attr(attribName, path.join(`${outputName}_files`, assetName));
+          $(el).attr(attributeName, path.join(`${outputName}_files`, assetName));
         });
       return $.html();
     })
